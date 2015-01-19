@@ -20,7 +20,9 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	flex
 BuildRequires:	gawk
 BuildRequires:	gtk+2-devel
+BuildRequires:	pkgconfig
 BuildRequires:	python-devel >= 2.4
+BuildRequires:	rpm-pythonprov
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -41,7 +43,7 @@ developing applications that use %{name}.
 Summary:	Python binding for %{name}
 Group:		Development/Languages
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	%{name}-python2
+Obsoletes:	cwiid-python2
 
 %description -n python-%{name}
 Python2 binding for %{name}

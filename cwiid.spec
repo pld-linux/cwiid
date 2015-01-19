@@ -79,13 +79,13 @@ mv %{name}-*/* .
 %{__aclocal}
 %{__autoconf}
 CC="%{__cc} %{rpmcflags}"
-%configure
+%configure \
+	--disable-ldconfig
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
-	LDCONFIG=/bin/true \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}

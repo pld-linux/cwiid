@@ -75,7 +75,7 @@ system input sources like the mouse and keyboard.
 %prep
 %setup -qc
 mv %{name}-*/* .
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 %{__aclocal}

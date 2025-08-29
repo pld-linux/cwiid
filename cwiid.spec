@@ -1,17 +1,18 @@
-%define subver	fadf11e
-%define rel		1
+%define gitref	fadf11e
+%define	snap	20100222
+%define rel	1
 Summary:	Wiimote interface library
 Name:		cwiid
 Version:	0.6.00
-Release:	0.%{rel}.%{subver}
+Release:	1.%{snap}.%{rel}
 License:	GPL v2+
 Group:		Libraries
 #Source0:	https://github.com/abstrakraft/cwiid/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
-Source0:	https://github.com/abstrakraft/cwiid/archive/%{subver}/%{name}-%{version}-%{subver}.tar.gz
+Source0:	https://github.com/abstrakraft/cwiid/archive/%{gitref}/%{name}-%{version}-%{gitref}.tar.gz
 # Source0-md5:	2d5430a465357242514942ae82139609
 Source1:	wmgui.desktop
 Patch0:		wmdemo-lib.patch
-URL:		http://abstrakraft.org/cwiid/
+URL:		https://github.com/abstrakraft/cwiid
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison

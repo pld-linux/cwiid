@@ -2,6 +2,7 @@
 %define	snap	20100222
 %define rel	1
 Summary:	Wiimote interface library
+Summary(pl.UTF-8):	Biblioteka interfejsu Wiimote
 Name:		cwiid
 Version:	0.6.00
 Release:	1.%{snap}.%{rel}
@@ -28,39 +29,57 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 CWiiD is a library that enables your application to communicate with a
-wiimote using a bluetooth connection.
+wiimote using a Bluetooth connection.
+
+%description -l pl.UTF-8
+CWiiD to bibliotka umożliwiająca aplikacjom komunikację z wiimote przy
+użyciu połączenia Bluetooth.
 
 %package devel
-Summary:	Development files for %{name}
+Summary:	Development files for CWiiD
+Summary(pl.UTF-8):	Pliki programistyczne CWiiD
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	bluez-libs-devel
 
 %description devel
-The %{name}-devel package contains libraries and header files for
-developing applications that use %{name}.
+This package contains header files for developing applications that
+use CWiiD.
+
+%description devel -l pl.UTF-8
+Ten pakiet zaweira pliki nagłówkowe do tworzenia aplikacji
+wykorzystujących CWiiD.
 
 %package -n python-%{name}
-Summary:	Python binding for %{name}
+Summary:	Python binding for CWiiD library
+Summary(pl.UTF-8):	Wiązania Pythona do biblioteki CWiiD
 Group:		Development/Languages
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	cwiid-python2
+Obsoletes:	cwiid-python2 < 0.6.00-1
 
 %description -n python-%{name}
-Python2 binding for %{name}
+Python2 binding for CWiiD library.
+
+%description -n python-%{name} -l pl.UTF-8
+Wiązania Pythona do biblioteki CWiiD.
 
 %package utils
-Summary:	Wiimote connection test application
+Summary:	Wiimote connection test applications
+Summary(pl.UTF-8):	Aplikacje testujące połączenie Wiimote
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-wmgui = %{version}-%{release}
 Obsoletes:	cwiid-wmgui < 0.6.00-7
 
 %description utils
-Applications to test the wiimote connection
+Applications to test the wiimote connection.
+
+%description utils -l pl.UTF-8
+Aplikacje do testowania połączenia wiimote.
 
 %package wminput
 Summary:	Enables using the wiimote as an input source
+Summary(pl.UTF-8):	Użycie wiimote jako źródła wejścia
 # The licence must be GPLv2 instead of GPLv2+ for this package
 # since the file wminput/action_enum.txt is GPLv2 as stated
 # in the file.
@@ -72,6 +91,10 @@ Requires:	python-%{name} = %{version}-%{release}
 %description wminput
 This program allows the user to use the wiimote to emulate normal
 system input sources like the mouse and keyboard.
+
+%description wminput -l pl.UTF-8
+Ten program pozwala użytkownikowi używać wiimote do emulacji zwykłych
+źródeł wejściowych, takich jak mysz i klawiatura.
 
 %prep
 %setup -qc

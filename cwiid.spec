@@ -1,3 +1,8 @@
+#
+# Conditional build:
+%bcond_without	python2		# python (2.x) binding
+%bcond_without	static_libs	# static library
+
 %define gitref	fadf11e
 %define	snap	20100222
 %define rel	1
@@ -13,17 +18,18 @@ Source0:	https://github.com/abstrakraft/cwiid/archive/%{gitref}/%{name}-%{versio
 # Source0-md5:	2d5430a465357242514942ae82139609
 Source1:	wmgui.desktop
 Patch0:		wmdemo-lib.patch
+Patch1:		%{name}-format.patch
 URL:		https://github.com/abstrakraft/cwiid
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	bluez-libs-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	flex
 BuildRequires:	gawk
-BuildRequires:	gtk+2-devel
+BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	pkgconfig
-BuildRequires:	python-devel >= 2.4
+%{?with_python2:BuildRequires:	python-devel >= 2.4}
 BuildRequires:	rpm-pythonprov
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -49,6 +55,18 @@ use CWiiD.
 %description devel -l pl.UTF-8
 Ten pakiet zaweira pliki nagłówkowe do tworzenia aplikacji
 wykorzystujących CWiiD.
+
+%package static
+Summary:	Static CWiiD library
+Summary(pl.UTF-8):	Statyczna biblioteka CWiiD
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static CWiiD library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka CWiiD.
 
 %package -n python-%{name}
 Summary:	Python binding for CWiiD library
@@ -98,25 +116,33 @@ Ten program pozwala użytkownikowi używać wiimote do emulacji zwykłych
 
 %prep
 %setup -qc
-mv %{name}-*/* .
+%{__mv} %{name}-*/* .
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 %{__aclocal}
 %{__autoconf}
-CC="%{__cc} %{rpmcflags}"
 %configure \
-	--disable-ldconfig
-%{__make}
+	PYTHON=%{__python} \
+	--disable-ldconfig \
+	%{!?with_python:--without-python}
+
+LDFLAGS="%{rpmldflags}" \
+%{__make} \
+	WARNFLAGS="%{rpmcflags} %{rpmcppflags} -Wall -W"
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
-rm -v $RPM_BUILD_ROOT%{_libdir}/libcwiid.a
+%if %{without static_libs}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libcwiid.a
+%endif
 
 desktop-file-install --dir=$RPM_BUILD_ROOT%{_desktopdir} %{SOURCE1}
 
@@ -134,14 +160,29 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/cwiid.h
 %{_libdir}/libcwiid.so
+%{_includedir}/cwiid.h
 %{_pkgconfigdir}/cwiid.pc
 
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libcwiid.a
+%endif
+
+%if %{with python2}
 %files -n python-%{name}
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/cwiid.so
 %{py_sitedir}/cwiid-%{version}-py*.egg-info
+%endif
+
+%files utils
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/lswm
+%attr(755,root,root) %{_bindir}/wmgui
+%{_mandir}/man1/wmgui.1*
+%{_desktopdir}/wmgui.desktop
 
 %files wminput
 %defattr(644,root,root,755)
@@ -166,10 +207,3 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/%{name}/plugins/led.so
 %attr(755,root,root) %{_libdir}/%{name}/plugins/nunchuk_acc.so
 %attr(755,root,root) %{_libdir}/%{name}/plugins/nunchuk_stick2btn.so
-
-%files utils
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/lswm
-%attr(755,root,root) %{_bindir}/wmgui
-%{_mandir}/man1/wmgui.1*
-%{_desktopdir}/wmgui.desktop

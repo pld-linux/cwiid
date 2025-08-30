@@ -1,0 +1,11 @@
+--- cwiid-0.6.00/wmgui/main.c.orig	2010-02-21 16:56:59.000000000 +0100
++++ cwiid-0.6.00/wmgui/main.c	2025-08-29 21:46:59.713822746 +0200
+@@ -442,7 +442,7 @@ void message(GtkMessageType type, const
+ {
+ 	GtkWidget *dialog;
+ 
+-	dialog = gtk_message_dialog_new(parent, 0, type, GTK_BUTTONS_OK, message);
++	dialog = gtk_message_dialog_new(parent, 0, type, GTK_BUTTONS_OK, "%s", message);
+ 	gtk_dialog_run(GTK_DIALOG(dialog));
+ 	gtk_widget_destroy(dialog);
+ }
